@@ -1,10 +1,6 @@
 import requests
 from datetime import date, timedelta
 
-github_api = 'https://api.github.com'
-week_ago = date.today() - timedelta(days=7)
-top_size = 20
-
 
 def format_json_data(json_data):
     # uses get_open_issues_amount to count issues
@@ -24,15 +20,15 @@ def format_json_data(json_data):
     return repositories
 
 
-def get_trending_repositories(top_size):
+def get_trending_repositories(top_size=20):
     params = {
-        "q": "created:>{}".format(week_ago),
+        "q": "created:>{}".format(date.today() - timedelta(days=7)),
         "sort": "stars",
         "order": "desc",
         "per_page": top_size
     }
 
-    return requests.get(github_api+'/search/repositories', params=params).json()['items']
+    return requests.get('https://api.github.com/search/repositories', params=params).json()['items']
 
 
 def pretty_print(repositories):
@@ -46,7 +42,7 @@ def pretty_print(repositories):
 
 
 def main():
-    json_data = get_trending_repositories(top_size)
+    json_data = get_trending_repositories()
     repositories = format_json_data(json_data)
     pretty_print(repositories)
 
