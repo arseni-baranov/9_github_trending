@@ -6,10 +6,6 @@ week_ago = date.today() - timedelta(days=7)
 top_size = 20
 
 
-def get_open_issues_amount(repo_name, repo_owner):
-    return len(requests.get('https://api.github.com/repos/{}/{}/issues'.format(repo_name, repo_owner)).json())
-
-
 def format_json_data(json_data):
     # uses get_open_issues_amount to count issues
     repositories = []
@@ -20,8 +16,7 @@ def format_json_data(json_data):
             'repo_owner': repo['full_name'].split('/')[1],
             'stars': repo['stargazers_count'],
             'url': repo['html_url'],
-            'issues': get_open_issues_amount(repo['full_name'].split('/')[0],
-                                             repo['full_name'].split('/')[1])
+            'issues': repo['open_issues_count'],
         }
 
         repositories.append(repository)
